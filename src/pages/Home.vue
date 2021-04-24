@@ -41,18 +41,24 @@
 </template>
 
 <script>
-//import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   mounted() {
     this.$store.dispatch('getCompanies')
+              .catch(response => {
+                this.$vToastify.error('Falha ao Carregar Empresas', 'Erro');
+              })
     //this.getCompanies()
   },
 
   computed: {
-    companies () {
-      return this.$store.state.companies.items
-    }
+    // companies () {
+    //   return this.$store.state.companies.items
+    // }
+    ...mapState({
+      companies: state => state.companies.items
+    })
   }
 
   // methods: {
