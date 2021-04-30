@@ -1,11 +1,15 @@
 <template>
     <div class="row">
         
-        <h1 class="my-4 title-tenant text-center">Nome do Tenant</h1> 
+        <h1 class="my-4 title-tenant text-center">{{ company.name }}</h1> 
         <div class="list-categories">
-          <a href="#" class="list-categories__item active"><div class="icon"><i class="fas fa-pizza-slice"></i> </div> <span> Pizza </span> </a>
-          <a href="#" class="list-categories__item active"><div class="icon"><i class="fas fa-hamburger"></i> </div> <span> Sanduiche </span> </a>
-          <a href="#" class="list-categories__item active"><div class="icon"><i class="fas fa-ice-cream"></i> </div> <span> Sorvetes </span> </a>
+          <a href="#" 
+          class="list-categories__item" 
+          v-for="(category, index) in categories.data " :key="index">
+          <div class="icon"><i class="fas fa-pizza-slice"></i> </div> 
+          <span> {{ category.name }} </span>
+          </a>
+         
         </div>
 
             <!-- Cards Produtos -->
@@ -138,3 +142,34 @@
     </div>
     <!-- /.row -->
 </template>
+
+<script>
+import { mapState , mapActions} from 'vuex'
+export default {
+   props: ['companyFlag'],
+
+   created() {
+       if(this.company.name === '') {
+           return this.$router.push({name: 'home'})
+       }
+
+       this.getCategoriesByCompany(this.company.uuid)
+            .catch(response => {
+                this.$vToastify.error('Falha ao Carregar as Categorias', 'Erro');
+              })
+   },
+   
+   computed: {
+       ...mapState({
+           company: state => state.companies.companySelected,
+           categories: state => state.companies.categoriesCompanySelected
+       })
+   },
+
+   methods: {
+       ...mapActions([
+           'getCategoriesByCompany'
+       ])
+   }
+}
+</script>

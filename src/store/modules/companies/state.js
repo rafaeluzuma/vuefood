@@ -1,6 +1,13 @@
 const state = {
     items: {
         data: []
+    },
+    companySelected: {
+        name: ''
+    },
+
+    categoriesCompanySelected: {
+        data: []
     }
 }
 
